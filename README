@@ -1,3 +1,0 @@
-This project is to design a computer architecture from discrete NAND logic up to a fully operating computing architecture.
-
-Hardware will initially be developed in software using Verilog using Icarus Verilog as a simulator.
