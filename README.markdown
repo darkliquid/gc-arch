@@ -1,4 +1,6 @@
-# This project is to design a computer architecture from discrete NAND logic up to a fully operating computing architecture.
+# GC-Arch (GeekCoalition Architecture)
+
+This project is to design a computer architecture from discrete NAND logic up to a fully operating computing architecture.
 
 
 ## Why?
