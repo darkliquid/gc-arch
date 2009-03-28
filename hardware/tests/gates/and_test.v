@@ -6,12 +6,12 @@ module and_gate_test;
   and_gate test_and_gate (out, a, b);
 
   initial begin
-    $monitor ("a = %b b = %b out = %b", a, b, out);
-    a = 0;
-    b = 0;    
-    #1 a = 1;
-    #1 b = 1;
-    #1 a = 0;
+    if (! $value$plusargs("a=%b", a) && $value$plusargs("b=%b", b) ) begin
+      $display("ERROR: please specify +a=<value> +b=<value> to start.");
+      $finish;
+    end
+
+    #1 $display("out=%b", out);
     #1 $finish;
   end
 

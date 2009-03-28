@@ -1,35 +1,43 @@
 # Rakefile for hardware tasks
 
 namespace :hardware do
-  task :test do
-    files = FileList['tests/**/*_test.v']
-    lib_dirs = []
-    files.each do |path|
-      dir = File.dirname(path).gsub(/^tests\//, 'src/')
-      lib_dirs << dir unless lib_dirs.include?(dir)
-      dir_parts = dir.split('/')
-      while !dir_parts.empty? do
-        dir_parts.pop
-        sub_dir = dir_parts.join('/')
-	lib_dirs << sub_dir unless sub_dir.nil? || sub_dir.empty? || lib_dirs.include?(sub_dir)
+  namespace :test do
+    task :clean do
+      puts "Removing old test builds...\n"
+      files = FileList['tests/**/*_test.out']
+      files.each { |file| File.delete(file) }
+    end
+  
+    task :build => [:clean] do
+      puts "Building testfiles...\n"
+      files = FileList['tests/**/*_test.v']
+      lib_dirs = []
+      files.each do |path|
+        dir = File.dirname(path).gsub(/^tests\//, 'src/')
+        lib_dirs << dir unless lib_dirs.include?(dir)
+        dir_parts = dir.split('/')
+        while !dir_parts.empty? do
+          dir_parts.pop
+          sub_dir = dir_parts.join('/')
+  	      lib_dirs << sub_dir unless sub_dir.nil? || sub_dir.empty? || lib_dirs.include?(sub_dir)
+        end
       end
-    end
-    
-    puts
-
-    files.each do |test|
-      puts "Running test '#{test}' ..."
-      lib_flags = ''
-      lib_flags = " -y#{lib_dirs.join(' -y')}" unless lib_dirs.empty?
-      test_file = test.gsub('.v', '.out') 
-      command = "iverilog -o#{test_file} #{lib_flags} #{test}"
-      system(command)
-      puts
-      puts '-' * 20
-      puts `vvp #{test_file}`
-      puts '-' * 20
-      puts
-    end
+      
+      files.each do |test|
+        lib_flags = ''
+        lib_flags = " -y#{lib_dirs.join(' -y')}" unless lib_dirs.empty?
+        test_file = test.gsub('.v', '.out') 
+        command = "iverilog -o#{test_file} #{lib_flags} #{test}"
+        system(command)
+      end
+    end    
   end
+  
+  task :test => [:'test:build'] do
+    puts "Running tests...\n"
+    files = FileList['tests/**/*_test.rb']
+    puts `ruby -e '#{files.inspect}.each { |test| require test }'`
+  end
+
 end
 
