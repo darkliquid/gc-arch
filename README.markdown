@@ -21,6 +21,11 @@ Just watch the ladies flock in when you start throwing _that_ one around at part
  * Hardware will initially be developed in software using Verilog using [Icarus Verilog][1] as a simulator.
  * Tasks for automating compilation and everything else are all done using [Rake/Ruby][2].
 
+## Other useful stuff
+
+ * The Elements of Computing Systems by Noam Nisan and Shimon Schocken 
+(ISBN: 978-0-262-64068-8) - this book basically started off the whole 
+idea for the project
 
 
 [1]:http://iverilog.wikia.com
